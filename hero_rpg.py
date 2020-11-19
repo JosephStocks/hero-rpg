@@ -50,7 +50,7 @@ def main():
         if goblin.health > 0:
             # Goblin attacks hero
             hero.health -= goblin.power
-            print("The goblin does {} damage to you.".format(goblin.power))
+            print(f"The goblin does {goblin.power} damage to you.")
             if hero.health <= 0:
                 print("You are dead.")
 
