@@ -8,24 +8,47 @@
 
 class Hero: # Idea: could create a person class that hero and goblin inherit from OR
             # OR I could create a Hero class then a villain class that the Goblin inherits from
-    def __init__(self, health, power):
+    def __init__(self, health, power, name):
         self.health = health
         self.power = power
+        self.name = name
+    
+    def attack(self, enemy):
+        enemy.health -= self.power
+        print(f"You do {self.power} damage to the {enemy.__class__.__name__.lower()}.")
+        if enemy.health <= 0:
+            print(f"The {enemy.__class__.name} is dead.")
 
+    def alive(self):
+        return self.health > 0
+
+    def print_status(self):
+        print(f"You have {self.health} health and {self.power} power.")
 
 class Goblin:
     def __init__(self, health, power):
         self.health = health
         self.power = power
 
+    def attack(self, enemy):
+        enemy.health -= self.power
+        print(f"The goblin does {self.power} damage to you.")
+        if enemy.health <= 0:
+            print(f"You are dead.")
+
+    def alive(self):
+        return self.health > 0
+    
+    def print_status(self):
+        print(f"The {self.__class__.__name__.lower()} has {self.health} health and {self.power} power.")
+
 def main():
-    hero = Hero(health=10, power=5)
+    hero = Hero(health=10, power=5, name='you')
     goblin = Goblin(health=6, power=2)
 
-
-    while goblin.health > 0 and hero.health > 0:
-        print(f"You have {hero.health} health and {hero.power} power.")
-        print(f"The goblin has {goblin.health} health and {goblin.power} power.")
+    while goblin.alive() and hero.alive():
+        hero.print_status()
+        goblin.print_status()
         print()
         print("What do you want to do?")
         print("1. fight goblin")
@@ -35,10 +58,7 @@ def main():
         raw_input = input()
         if raw_input == "1":
             # Hero attacks goblin
-            goblin.health -= hero.power
-            print(f"You do {hero.power} damage to the goblin.")
-            if goblin.health <= 0:
-                print("The goblin is dead.")
+            hero.attack(goblin)
         elif raw_input == "2":
             pass
         elif raw_input == "3":
@@ -49,9 +69,6 @@ def main():
 
         if goblin.health > 0:
             # Goblin attacks hero
-            hero.health -= goblin.power
-            print(f"The goblin does {goblin.power} damage to you.")
-            if hero.health <= 0:
-                print("You are dead.")
+            goblin.attack(hero)
 
 main()
