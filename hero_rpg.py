@@ -11,7 +11,7 @@ class Character:
         return self.health > 0
 
     def attack(self, defender):
-        print(f"The {self.name} attacks the {defender.name} with {self.power} power")
+        print(f"\nThe {self.name} attacks the {defender.name} with {self.power} power")
         attacker = self
         defender.receive_damage(attacker, self.power)
 
@@ -31,7 +31,7 @@ class Hero(Character):
         if choice == "regular":
             super().attack(defender)
         else:
-            print(f"The {self.name} attacks the {defender.name} with {2 * self.power} power! Double the power!")
+            print(f"\nThe {self.name} attacks the {defender.name} with {2 * self.power} power! Double the power!")
             attacker = self
             defender.receive_damage(attacker, 2 * self.power)
 
@@ -50,12 +50,22 @@ class Zombie(Character):
         if self.health <= 0:
             print(f"--> The {self.name} is already undead! He can't die again!! Ha! Ha! Ha!!!")
 
+class Medic(Character):
+    def receive_damage(self, attacker, attack_power):
+        # 20% chance to double attack power
+        choice = random.choices(["regular", "recuperate"], [80, 20])[0]
+        if choice == "regular":
+            super().receive_damage(attacker, attack_power)
+        else:
+            self.health -= (attack_power - 2)
+            print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
+            
+            if self.health <= 0:
+                self.health = 2
+            print(f"--> ...but the medic heals himself 2 points!! He now has {self.health} health!")
 
 def LOOK_AT_LATER():
     
-    class Medic(Character):
-        pass
-
     class Shadow(Character):
         pass
 
@@ -87,11 +97,11 @@ def LOOK_AT_LATER():
     #     pass
 
 def main():
-    hero = Hero(health=10, power=5)
-    enemy = Zombie(health=5, power=2)
+    hero = Hero(health=100, power=5)
+    enemy = Medic(health=90, power=2)
 
     while hero.alive() and enemy.alive():
-        print()
+        print('\n')
         hero.print_status()
         enemy.print_status()
 
