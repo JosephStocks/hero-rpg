@@ -52,7 +52,7 @@ class Zombie(Character):
 
 class Medic(Character):
     def receive_damage(self, attacker, attack_power):
-        # 20% chance to double attack power
+        # 20% chance to regain 2 health
         choice = random.choices(["regular", "recuperate"], [80, 20])[0]
         if choice == "regular":
             super().receive_damage(attacker, attack_power)
@@ -64,11 +64,20 @@ class Medic(Character):
                 self.health = 2
             print(f"--> ...but the medic heals himself 2 points!! He now has {self.health} health!")
 
-def LOOK_AT_LATER():
-    
-    class Shadow(Character):
-        pass
+class Shadow(Character):
+    def __init__(self, power):
+        super().__init__(health=1, power=power)
 
+    def receive_damage(self, attacker, attack_power):
+        # 20% chance to take any damage
+        choice = random.choices(["take_damage", "dodge"], [10, 90])[0]
+        if choice == "take_damage":
+            super().receive_damage(attacker, attack_power)
+        else:
+            print(f"--> The {self.name} dodged the attack! The {self.name} took no damage.")
+
+
+def LOOK_AT_LATER():
     class Wizard(Character):
         pass
 
@@ -98,7 +107,7 @@ def LOOK_AT_LATER():
 
 def main():
     hero = Hero(health=100, power=5)
-    enemy = Medic(health=90, power=2)
+    enemy = Shadow(power=2)
 
     while hero.alive() and enemy.alive():
         print('\n')
