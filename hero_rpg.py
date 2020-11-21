@@ -19,7 +19,7 @@ class Character:
         self.health -= attack_power
         print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
         if self.health <= 0:
-            print(f"The {self.name} is dead.")
+            print(f"--> The {self.name} is dead.")
 
     def print_status(self):
         print(f"The {self.name} has {self.health} health and {self.power} power.")
@@ -40,7 +40,15 @@ class Goblin(Character):
     pass
 
 class Zombie(Character):
-    pass
+    @staticmethod
+    def alive():
+        return True
+
+    def receive_damage(self, attacker, attack_power):
+        self.health -= attack_power
+        print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
+        if self.health <= 0:
+            print(f"--> The {self.name} is already undead! He can't die again!! Ha! Ha! Ha!!!")
 
 
 def LOOK_AT_LATER():
@@ -79,8 +87,8 @@ def LOOK_AT_LATER():
     #     pass
 
 def main():
-    hero = Hero(health=100, power=5)
-    enemy = Goblin(health=70, power=2)
+    hero = Hero(health=10, power=5)
+    enemy = Zombie(health=5, power=2)
 
     while hero.alive() and enemy.alive():
         print()
