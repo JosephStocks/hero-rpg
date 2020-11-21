@@ -21,10 +21,15 @@ class Character:
         if self.health <= 0:
             print(f"--> The {self.name} is dead.")
 
+
     def print_status(self):
         print(f"The {self.name} has {self.health} health and {self.power} power.")
 
 class Hero(Character):
+    def __init__(self, health, power, coins):
+        super().__init__(health, power)
+        self.coins = coins
+
     def attack(self, defender):
         # 20% chance to double attack power
         choice = random.choices(["regular", "double"], [80, 20])[0]
@@ -35,11 +40,25 @@ class Hero(Character):
             attacker = self
             defender.receive_damage(attacker, 2 * self.power)
 
+    def take_bounty(self, bounty):
+        self.coins += bounty
+        print(f"\nThe hero takes the bounty of {bounty} coins. He now has {self.coins} coins.")
 
-class Goblin(Character):
+class BadGuy(Character):
+    bounty = 5
+    def receive_damage(self, attacker, attack_power):
+        self.health -= attack_power
+        print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
+        if self.health <= 0:
+            print(f"--> The {self.name} is dead.")
+            attacker.take_bounty(self.bounty)
+
+class Goblin(BadGuy):
     pass
 
-class Zombie(Character):
+class Zombie(BadGuy):
+    bounty = 100
+
     @staticmethod
     def alive():
         return True
@@ -50,7 +69,7 @@ class Zombie(Character):
         if self.health <= 0:
             print(f"--> The {self.name} is already undead! He can't die again!! Ha! Ha! Ha!!!")
 
-class Medic(Character):
+class Medic(BadGuy):
     def receive_damage(self, attacker, attack_power):
         # 20% chance to regain 2 health
         choice = random.choices(["regular", "recuperate"], [80, 20])[0]
@@ -64,22 +83,23 @@ class Medic(Character):
                 self.health = 2
             print(f"--> ...but the medic heals himself 2 points!! He now has {self.health} health!")
 
-class Shadow(Character):
+class Shadow(BadGuy):
     def __init__(self, power):
         super().__init__(health=1, power=power)
 
     def receive_damage(self, attacker, attack_power):
-        # 20% chance to take any damage
+        # 10% chance to take any damage
         choice = random.choices(["take_damage", "dodge"], [10, 90])[0]
         if choice == "take_damage":
             super().receive_damage(attacker, attack_power)
         else:
             print(f"--> The {self.name} dodged the attack! The {self.name} took no damage.")
 
+class Wizard(BadGuy):
+    bounty = 6
 
 def LOOK_AT_LATER():
-    class Wizard(Character):
-        pass
+
 
     class NewBadGuy2(Character):
         pass
@@ -106,7 +126,7 @@ def LOOK_AT_LATER():
     #     pass
 
 def main():
-    hero = Hero(health=100, power=5)
+    hero = Hero(health=100, power=5, coins=10)
     enemy = Shadow(power=2)
 
     while hero.alive() and enemy.alive():
