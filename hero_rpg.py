@@ -25,6 +25,7 @@ class Character:
     def print_status(self):
         print(f"The {self.name} has {self.health} health and {self.power} power.")
 
+
 class Hero(Character):
     def __init__(self, health, power, coins):
         super().__init__(health, power)
@@ -125,10 +126,7 @@ def LOOK_AT_LATER():
     # class Swap(Item):
     #     pass
 
-def main():
-    hero = Hero(health=100, power=5, coins=10)
-    enemy = Shadow(power=2)
-
+def fightEngine(hero, enemy):
     while hero.alive() and enemy.alive():
         print('\n')
         hero.print_status()
@@ -153,4 +151,36 @@ def main():
         if enemy.health > 0:
             enemy.attack(hero)
 
-main()
+# hero = Hero(health=100, power=5, coins=10)
+# enemy = Shadow(power=2)
+# fightEngine(hero, enemy)
+
+# def main():
+#     while hero.alive():
+#         print("\nWhat do you want to do?")
+#         print(f"1. Fight an enemy in the arena")
+#         print("2. Go to the store")
+#         print("3. Flee")
+#         print("> ", end=' ')
+#         raw_input = input()
+#         if raw_input == "1":
+#             fightChoice()
+#         elif raw_input == "2":
+#             pass
+#         elif raw_input == "3":
+#             print("Goodbye.")
+#             break
+#         else:
+#             print(f"Invalid input {raw_input}")
+
+def fightChoice(fighter_classes):# I could put the enemy classes inside a dictionary and then choose from the dictionary with numbers. Also, I put a variable number of enemies by passing them in as a variable.
+    print("\nWho do you want to fight?!")
+    choice_dict = {}
+    for i, fighter_class in enumerate(dict.fromkeys(fighter_classes)):
+        choice_dict[i + 1] = fighter_class
+        print(f"{i + 1}. {fighter_class.__name__}")
+    print("> ", end=' ')
+
+    return choice_dict[int(input())]
+
+print(fightChoice([Goblin, Zombie, Medic, Shadow, Wizard]))
