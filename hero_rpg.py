@@ -97,8 +97,19 @@ class Medic(BadGuy):
             print(f"--> ...but the medic heals himself 2 points!! He now has {self.health} health!")
 
 class Shadow(BadGuy):
-    def __init__(self, power):
-        super().__init__(health=1, power=power)
+    # def __init__(self, power):
+    #     super().__init__(health=1, power=power)
+    @classmethod
+    def easy(cls):
+        return cls(health=1, power=2)
+
+    @classmethod
+    def normal(cls):
+        return cls(health=10, power=5)
+
+    @classmethod
+    def impossible(cls):
+        return cls(health=500, power=20)
 
     def receive_damage(self, attacker, attack_power):
         # 10% chance to take any damage
