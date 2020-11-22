@@ -46,6 +46,18 @@ class Hero(Character):
         print(f"\nThe hero takes the bounty of {bounty} coins. He now has {self.coins} coins.")
 
 class BadGuy(Character):
+    @classmethod
+    def easy(cls):
+        return cls(health=10, power=2)
+
+    @classmethod
+    def normal(cls):
+        return cls(health=50, power=5)
+
+    @classmethod
+    def impossible(cls):
+        return cls(health=500, power=20)
+
     bounty = 5
     def receive_damage(self, attacker, attack_power):
         self.health -= attack_power
@@ -126,6 +138,16 @@ def LOOK_AT_LATER():
     # class Swap(Item):
     #     pass
 
+def fightChoice(fighter_classes):
+    print("\nWho do you want to fight?!")
+    choice_dict = {}
+    for i, fighter_class in enumerate(dict.fromkeys(fighter_classes)):
+        choice_dict[i + 1] = fighter_class
+        print(f"{i + 1}. {fighter_class.__name__}")
+    print("> ", end=' ')
+
+    return choice_dict[int(input())]
+
 def fightEngine(hero, enemy):
     while hero.alive() and enemy.alive():
         print('\n')
@@ -133,9 +155,9 @@ def fightEngine(hero, enemy):
         enemy.print_status()
 
         print("\nWhat do you want to do?")
-        print(f"1. fight {enemy.name}")
-        print("2. do nothing")
-        print("3. flee")
+        print(f"1. Fight {enemy.name}")
+        print("2. Do nothing")
+        print("3. Flee")
         print("> ", end=' ')
         raw_input = input()
         if raw_input == "1":
@@ -151,36 +173,79 @@ def fightEngine(hero, enemy):
         if enemy.health > 0:
             enemy.attack(hero)
 
-# hero = Hero(health=100, power=5, coins=10)
-# enemy = Shadow(power=2)
-# fightEngine(hero, enemy)
-
-# def main():
-#     while hero.alive():
-#         print("\nWhat do you want to do?")
-#         print(f"1. Fight an enemy in the arena")
-#         print("2. Go to the store")
-#         print("3. Flee")
-#         print("> ", end=' ')
-#         raw_input = input()
-#         if raw_input == "1":
-#             fightChoice()
-#         elif raw_input == "2":
-#             pass
-#         elif raw_input == "3":
-#             print("Goodbye.")
-#             break
-#         else:
-#             print(f"Invalid input {raw_input}")
-
-def fightChoice(fighter_classes):# I could put the enemy classes inside a dictionary and then choose from the dictionary with numbers. Also, I put a variable number of enemies by passing them in as a variable.
-    print("\nWho do you want to fight?!")
-    choice_dict = {}
-    for i, fighter_class in enumerate(dict.fromkeys(fighter_classes)):
-        choice_dict[i + 1] = fighter_class
-        print(f"{i + 1}. {fighter_class.__name__}")
+def difficultyChoice():
+    print("Choose your difficulty level?")
+    for i, difficulty in enumerate(["easy", "normal", "impossible"]):
+        print(f"{i + 1}. {difficulty.capitalize()}")
     print("> ", end=' ')
+    return int(input())
 
-    return choice_dict[int(input())]
+def startingScreen():
+    print(r"""
+   _____ _                 _        _____       _   _                 
+  / ____(_)               | |      |  __ \     | | | |                
+ | (___  _ _ __ ___  _ __ | | ___  | |__) |   _| |_| |__   ___  _ __  
+  \___ \| | '_ ` _ \| '_ \| |/ _ \ |  ___/ | | | __| '_ \ / _ \| '_ \ 
+  ____) | | | | | | | |_) | |  __/ | |   | |_| | |_| | | | (_) | | | |
+ |_____/|_|_| |_| |_| .__/|_|\___| |_|    \__, |\__|_| |_|\___/|_| |_|
+                    | |                    __/ |                      
+                    |_|                   |___/                       
+          _____  _____   _____      _____                      
+         |  __ \|  __ \ / ____|    / ____|                     
+         | |__) | |__) | |  __    | |  __  __ _ _ __ ___   ___ 
+         |  _  /|  ___/| | |_ |   | | |_ |/ _` | '_ ` _ \ / _ \
+         | | \ \| |    | |__| |   | |__| | (_| | | | | | |  __/
+         |_|  \_\_|     \_____|    \_____|\__,_|_| |_| |_|\___|
+                                                               
+                              _,.
+                            ,` -.)
+                           ( _/-\\-._
+                          /,|`--._,-^|            ,
+                          \_| |`-._/||          ,'|
+                            |  `-, / |         /  /
+                            |     || |        /  /
+                             `r-._||/   __   /  /
+                         __,-<_     )`-/  `./  /
+                        '  \   `---'   \   /  /
+                            |           |./  /
+                            /           //  /
+                        \_/' \         |/  /
+                         |    |   _,^-'/  /
+                         |    , ``  (\/  /_
+                          \,.->._    \X-=/^
+                          (  /   `-._//^`
+                           `Y-.____(__}
+                            |     {__)
+                                  ()
+    """)
+    input()
 
-print(fightChoice([Goblin, Zombie, Medic, Shadow, Wizard]))
+def main():
+    startingScreen()
+    hero = Hero(health=100, power=5, coins=10)
+    difficulty = difficultyChoice()
+    while hero.alive():
+        print("\nWhat do you want to do?")
+        print(f"1. Fight an enemy in the arena")
+        print("2. Go to the store")
+        print("3. Flee")
+        print("> ", end=' ')
+        raw_input = input()
+        if raw_input == "1":
+            fighter = fightChoice([Goblin, Zombie, Medic, Shadow, Wizard])
+            if difficulty == 1:
+                fighter = fighter.easy()
+            elif difficulty == 2:
+                fighter = fighter.normal()
+            else:
+                fighter = fighter.impossible()
+            fightEngine(hero, fighter)
+        elif raw_input == "2":
+            pass
+        elif raw_input == "3":
+            print("Goodbye.")
+            break
+        else:
+            print(f"Invalid input {raw_input}")
+
+main()
