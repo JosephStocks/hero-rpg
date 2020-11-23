@@ -1,4 +1,4 @@
-from characters import Hero, Goblin, Zombie, Medic, Shadow, Wizard
+from characters import Hero, Goblin, Zombie, Medic, Shadow, Wizard, Thief
 from items import SuperTonic, Armor, Evade
 from time import sleep
 
@@ -167,7 +167,7 @@ def main():
             print( "> ", end=' ')
             raw_input = input()
             if raw_input == "1":
-                fighter = fightChoice([Goblin, Zombie, Medic, Shadow, Wizard])
+                fighter = fightChoice([Goblin, Zombie, Medic, Shadow, Wizard, Thief])
                 if difficulty == 1:
                     fighter = fighter.easy()
                 elif difficulty == 2:

@@ -79,6 +79,7 @@ class Hero(Character):
 
 
 class BadGuy(Character):
+    bounty = 5
     @classmethod
     def easy(cls):
         return cls(health=10, power=2)
@@ -91,7 +92,6 @@ class BadGuy(Character):
     def impossible(cls):
         return cls(health=500, power=20)
 
-    bounty = 5
     def receive_damage(self, attacker, attack_power):
         self.health -= attack_power
         print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
@@ -173,18 +173,24 @@ class Wizard(BadGuy):
             print(f"--> The {attacker.name}'s attack deals 0 damage to the {self.name}.")
             self.spell_cooldown -= 1
     
-
-def LOOK_AT_LATER():
-
-    class NewBadGuy2(Character):
-        pass
-
-
-
-    # ############################
-    # class Store:
-    #     pass
-
-
-
-
+class Thief(BadGuy):
+    stolenArmor = 0
+    armorValueHistory = 0
+    def attack(self, defender):
+        # 20% chance to steal armor
+        if self.stolenArmor == 0:
+            choice = random.choices(["steal", "regular"], [20, 80])[0]
+            if choice == "regular":
+                super().attack(defender)
+            else:
+                print(f"The {self.name} steals the {defender.name}'s armor!! The {self.name} will keep the armor for 5 turns.")
+                self.armorValueHistory = defender.armor
+                defender.armor = 0
+                self.stolenArmor = 4
+        else: # self.spell_cooldown > 0:
+            print(f"The {self.name} still has {defender.name}'s armor for {self.stolenArmor} more turns.'")
+            super().attack(defender)
+            self.stolenArmor -= 1
+            if self.stolenArmor == 0:
+                defender.armor = self.armorValueHistory
+                self.armorValueHistory = 0
