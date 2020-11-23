@@ -95,7 +95,7 @@ class BadGuy(Character):
     def receive_damage(self, attacker, attack_power):
         self.health -= attack_power
         print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
-        if self.health <= 0:
+        if not self.alive():
             print(f"--> The {self.name} is dead.")
             attacker.take_bounty(self.bounty)
 
@@ -112,7 +112,7 @@ class Zombie(BadGuy):
     def receive_damage(self, attacker, attack_power):
         self.health -= attack_power
         print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
-        if self.health <= 0:
+        if not self.alive():
             print(f"--> The {self.name} is already undead! He can't die again!! Ha! Ha! Ha!!!")
 
 class Medic(BadGuy):
@@ -162,8 +162,9 @@ class Wizard(BadGuy):
             if choice == "regular":
                 self.health -= attack_power
                 print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
-                if self.health <= 0:
+                if not self.alive():
                     print(f"--> The {self.name} is dead.")
+                    attacker.take_bounty(self.bounty)
             else:
                 print(f"The {self.name} casts a spell!! The hero's attack has been rendered harmless for 4 turns.")
                 print(f"--> The {attacker.name}'s attack deals 0 damage to the {self.name}.")
