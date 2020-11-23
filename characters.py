@@ -154,6 +154,24 @@ class Shadow(BadGuy):
 
 class Wizard(BadGuy):
     bounty = 6
+    spell_cooldown = 0
+
+    def receive_damage(self, attacker, attack_power):
+        if self.spell_cooldown == 0:
+            choice = random.choices(["cast_spell", "regular"], [10, 90])[0]
+            if choice == "regular":
+                self.health -= attack_power
+                print(f"--> The {attacker.name}'s attack deals {attack_power} damage to the {self.name}.")
+                if self.health <= 0:
+                    print(f"--> The {self.name} is dead.")
+            else:
+                print(f"The {self.name} casts a spell!! The hero's attack has been rendered harmless for 4 turns.")
+                print(f"--> The {attacker.name}'s attack deals 0 damage to the {self.name}.")
+                self.spell_cooldown = 3
+        else: # self.spell_cooldown > 0:
+            print(f"The {self.name}'s spell still has a hold of the hero. He has no powers for {self.spell_cooldown} turns.")
+            print(f"--> The {attacker.name}'s attack deals 0 damage to the {self.name}.")
+            self.spell_cooldown -= 1
     
 
 def LOOK_AT_LATER():

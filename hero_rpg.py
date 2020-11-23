@@ -188,5 +188,6 @@ def main():
                 print(f"Invalid input {raw_input}")
         if raw_input != "4":
             printGameOver()
+            hero = Hero(health=100, power=5, coins=10)
 
 main()
