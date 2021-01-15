@@ -190,4 +190,5 @@ def main():
             printGameOver()
             hero = Hero(health=100, power=5, coins=10)
 
+
 main()
