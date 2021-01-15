@@ -80,4 +80,5 @@ def main(screen):
         else:
             sleep(0.25)
 
-curses.wrapper(main)
+if __name__ == "__main__":
+    curses.wrapper(main)
