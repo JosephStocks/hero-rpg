@@ -1,6 +1,6 @@
 # Python Hero RPG Game
 
-Download and navigate to ```hero_rpg folder```, and run game with:
+Download and navigate to ```hero_rpg``` folder, and run game with:
 ```bash
 python hero_rpg.py
 ```
