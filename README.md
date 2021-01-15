@@ -2,7 +2,7 @@
 
 Object oriented text-based python game. You, a hero, must fight a multitude of different villains/fighters who wield different skills and powers.
 
-Download and navigate to ```hero_rpg``` folder, and run game with:
+Download and navigate to ```hero-rpg``` folder, and run game with:
 ```bash
 python hero_rpg.py
 ```
